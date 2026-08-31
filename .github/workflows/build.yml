@@ -16,7 +16,7 @@ jobs:
         shell: cmd
         run: |
           if not exist build mkdir build
-          rc /nologo src\app.rc /fo build\app.res
+          rc src\app.rc /fo build\app.res
           cl /nologo /O2 /MT /DUNICODE /D_UNICODE /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp build\app.res /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
       - name: Upload EXE
         uses: actions/upload-artifact@v4
