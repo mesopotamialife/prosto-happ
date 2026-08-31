@@ -20,11 +20,20 @@ jobs:
         with:
           arch: x64
 
-      - name: Build ProstoHapp.exe
+      - name: Prepare build directory
         shell: cmd
         run: |
           if not exist build mkdir build
-          cl /nologo /O2 /MT /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp src\app.rc /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
+
+      - name: Compile resources
+        shell: cmd
+        run: |
+          rc.exe /fo build\app.res src\app.rc
+
+      - name: Compile and link
+        shell: cmd
+        run: |
+          cl.exe /nologo /O2 /MT /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp build\app.res /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
 
       - name: Check executable
         shell: cmd
