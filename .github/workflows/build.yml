@@ -1,0 +1,26 @@
+name: Build Prosto Happ
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Build
+        shell: cmd
+        run: |
+          if not exist build mkdir build
+          rc /nologo src\app.rc /fo build\app.res
+          cl /nologo /O2 /MT /DUNICODE /D_UNICODE /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp build\app.res /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: ProstoHapp-x64
+          path: build/ProstoHapp.exe
+          if-no-files-found: error
