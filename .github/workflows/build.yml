@@ -12,13 +12,12 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
-      - name: Build
-        shell: cmd
-        run: |
-          if not exist build mkdir build
-          rc src\app.rc /fo build\app.res
-          cl /nologo /O2 /MT /DUNICODE /D_UNICODE /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp build\app.res /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
-      - name: Upload EXE
+     - name: Build
+  shell: cmd
+  run: |
+    if not exist build mkdir build
+    cl /nologo /O2 /MT /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /EHsc src\main.cpp src\app.rc /link /SUBSYSTEM:WINDOWS /OUT:build\ProstoHapp.exe
+    - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
           name: ProstoHapp-x64
